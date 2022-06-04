@@ -1,7 +1,9 @@
 package com.luv2code.ecommerce.config;
 
+import com.luv2code.ecommerce.entity.Country;
 import com.luv2code.ecommerce.entity.Product;
 import com.luv2code.ecommerce.entity.ProductCategory;
+import com.luv2code.ecommerce.entity.State;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
@@ -28,17 +30,27 @@ public class MyDataRestConfig implements RepositoryRestConfigurer {
 
     @Override
     public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config, CorsRegistry cors) {
-        config.getExposureConfiguration()
-                .forDomainType(Product.class)
-                .withItemExposure((metdata, httpMethods) -> httpMethods.disable(DISABLED_HTTP_METHODS))
-                .withCollectionExposure((metdata, httpMethods) -> httpMethods.disable(DISABLED_HTTP_METHODS));
+        // for Product entity
+        disableHttpMethods(config, Product.class);
 
-        config.getExposureConfiguration()
-                .forDomainType(ProductCategory.class)
-                .withItemExposure((metdata, httpMethods) -> httpMethods.disable(DISABLED_HTTP_METHODS))
-                .withCollectionExposure((metdata, httpMethods) -> httpMethods.disable(DISABLED_HTTP_METHODS));
+        // for ProductCategory entity
+        disableHttpMethods(config, ProductCategory.class);
+
+        // for Country entity
+        disableHttpMethods(config, Country.class);
+
+        // for State entity
+        disableHttpMethods(config, State.class);
 
         exposeIds(config);
+    }
+
+    private void disableHttpMethods(RepositoryRestConfiguration config,
+                                        Class domainType) {
+        config.getExposureConfiguration()
+                .forDomainType(domainType)
+                .withItemExposure((metdata, httpMethods) -> httpMethods.disable(DISABLED_HTTP_METHODS))
+                .withCollectionExposure((metdata, httpMethods) -> httpMethods.disable(DISABLED_HTTP_METHODS));
     }
 
     private void exposeIds(RepositoryRestConfiguration config) {
