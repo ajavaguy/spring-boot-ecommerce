@@ -6,7 +6,6 @@ import java.util.UUID;
 
 @Service
 public class OrderTrackingNumberGenerator implements TrackingNumberGenerator{
-
     @Override
     public String get() {
         return UUID.randomUUID().toString();

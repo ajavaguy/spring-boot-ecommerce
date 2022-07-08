@@ -1,6 +1,8 @@
 package com.luv2code.ecommerce.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -25,10 +27,11 @@ import java.util.Set;
 @Table(name = "orders")
 @Setter
 @Getter
+@NoArgsConstructor
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "order_tracking_number")
@@ -59,15 +62,18 @@ public class Order {
     private Customer customer;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "shipping_address_id")
+    @JoinColumn(name = "shipping_address_id", referencedColumnName = "id")
     private Address shippingAddress;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "billing_address_id")
+    @JoinColumn(name = "billing_address_id", referencedColumnName = "id")
     private Address billingAddress;
 
     public void add(OrderItem orderItem) {
         if (orderItem != null) {
+            if (orderItems == null) {
+                orderItems = new HashSet<>();
+            }
             orderItems.add(orderItem);
             orderItem.setOrder(this);
         }

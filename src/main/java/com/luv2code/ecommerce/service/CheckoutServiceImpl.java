@@ -5,10 +5,11 @@ import com.luv2code.ecommerce.dto.Purchase;
 import com.luv2code.ecommerce.dto.PurchaseResponse;
 import com.luv2code.ecommerce.entity.Customer;
 import com.luv2code.ecommerce.entity.Order;
+import com.luv2code.ecommerce.entity.OrderItem;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.UUID;
+import java.util.Set;
 
 @Service
 public class CheckoutServiceImpl implements CheckoutService {
@@ -33,7 +34,8 @@ public class CheckoutServiceImpl implements CheckoutService {
         order.setOrderTrackingNumber(orderTrackingNumber);
 
         // populate order with order items
-        order.setOrderItems(purchase.getOrderItems());
+        Set<OrderItem> orderItems = purchase.getOrderItems();
+        orderItems.forEach(order::add);
 
         // populate order with billingAddress
         order.setBillingAddress(purchase.getBillingAddress());

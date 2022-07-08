@@ -21,7 +21,7 @@ import java.util.Set;
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "first_name")
@@ -38,10 +38,12 @@ public class Customer {
 
     public void addOrder(Order order) {
         if (order != null) {
+            if (orders == null) {
+                orders = new HashSet<>();
+            }
             orders.add(order);
             order.setCustomer(this);
         }
     }
-
 
 }
